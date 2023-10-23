@@ -1,0 +1,37 @@
+    - name: Download Prometheus
+      get_url:
+        url: "https://github.com/prometheus/prometheus/releases/download/v2.27.1/prometheus-2.27.1.linux-amd64.tar.gz"
+        dest: /tmp/prometheus-2.27.1.linux-amd64.tar.gz
+
+    - name: Add Prometheus user
+      user:
+        name: prometheus
+        shell: /bin/false
+        system: yes
+        state: present
+
+    - name: Create Prometheus directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: prometheus
+        group: prometheus
+      loop:
+        - /etc/prometheus
+        - /var/lib/prometheus
+
+    - name: Extract Prometheus
+      unarchive:
+        src: /tmp/prometheus-2.27.1.linux-amd64.tar.gz
+        dest: /opt/
+        remote_src: yes
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Start Prometheus service
+      service:
+        name: prometheus
+        state: started
+        enabled: yes

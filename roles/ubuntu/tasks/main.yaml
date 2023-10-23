@@ -1,0 +1,21 @@
+
+    - name: Install required packages
+      apt:
+        name: 
+          - prometheus
+          - prometheus-node-exporter
+      become: yes
+
+    - name: Start and enable Prometheus
+      systemd:
+        name: prometheus
+        enabled: yes
+        state: started
+      become: yes
+
+    - name: Start and enable Node Exporter
+      systemd:
+        name: prometheus-node-exporter
+        enabled: yes
+        state: started
+      become: yes

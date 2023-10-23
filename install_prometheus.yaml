@@ -1,0 +1,7 @@
+---
+- name: Install Prometheus on Ubuntu
+  hosts: ubuntu
+  become: yes
+  roles: 
+    - ubuntu
+    - centos
